@@ -1,4 +1,4 @@
-# Mapbox GL Language [![Build Status](https://travis-ci.org/mapbox/mapbox-gl-language.svg?branch=master)](https://travis-ci.org/mapbox/mapbox-gl-language) [![npm](https://img.shields.io/npm/v/@mapbox/mapbox-gl-language.svg)](https://www.npmjs.com/package/@mapbox/mapbox-gl-language)
+# OpenMapTiles Language
 
 Adds support for switching the language of your map style in [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/) maps.
 
@@ -12,31 +12,9 @@ _Automatic style transformations for different languages_
 
 _Switch language based on user agent_
 
-## Usage
-
-**mapbox-gl-language** is a [Mapbox GL JS plugin](https://www.mapbox.com/blog/build-mapbox-gl-js-plugins/) that you can easily add on top of your map.
-
-**When using a CDN**
-
-    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v0.10.1/mapbox-gl-language.js'></script>
-
-**When using modules**
-
-Check [how to use Mapbox GL JS in a module bundler](https://www.mapbox.com/mapbox-gl-js/api/).
-
-```bash
-npm install --save mapbox-gl @mapbox/mapbox-gl-language
-```
-
-```javascript
-var mapboxgl = require('mapbox-gl')
-var OpenMapTilesLanguage = require('@mapbox/mapbox-gl-language');
-```
-
 **Example**
 
 ```javascript
-mapboxgl.accessToken = 'YOUR_ACCESS_TOKEN';
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v10',
@@ -82,7 +60,7 @@ property of a style to use an [expression](https://docs.mapbox.com/mapbox-gl-js/
   ]
 ]
 ```
-Only styles based on [Mapbox v8 styles](https://docs.mapbox.com/help/troubleshooting/streets-v8-migration-guide/) are supported.
+Only styles based on [OpenMapTiles styles](https://openmaptiles.org/) are supported.
 
 #### Parameters
 
@@ -115,12 +93,11 @@ Run the linter and watch for changes to rebuild with browserify.
 
 ## Languages
 
-Showcasing the languages supported by Mapbox Streets.
+Showcasing the languages supported by OpenMapTiles.
 
 -   [Your Browser language](https://mapbox.github.io/mapbox-gl-language/examples/browser.html)
 -   [Arabic](https://mapbox.github.io/mapbox-gl-language/examples/ar.html)
--   [Chinese Simplified](https://mapbox.github.io/mapbox-gl-language/examples/zh-Hans.html)
--   [Chinese Traditional](https://mapbox.github.io/mapbox-gl-language/examples/zh-Hant.html)
+-   [Chinese Simplified](https://mapbox.github.io/mapbox-gl-language/examples/zh.html)
 -   [English](https://mapbox.github.io/mapbox-gl-language/examples/en.html)
 -   [French](https://mapbox.github.io/mapbox-gl-language/examples/fr.html)
 -   [German](https://mapbox.github.io/mapbox-gl-language/examples/de.html)
@@ -135,13 +112,4 @@ Showcasing the languages supported by Mapbox Streets.
 ## Supported Styles
 
 You can configure the plugin to support your own custom style using style transforms and custom language fields.
-By default, this plugin works best with official Mapbox styles or styles derived from official Mapbox styles.
-The styles must be based on [Mapbox v8 styles](https://docs.mapbox.com/help/troubleshooting/streets-v8-migration-guide/):
-
--   `mapbox://styles/mapbox/streets-v11`
--   `mapbox://styles/mapbox/outdoors-v11`
--   `mapbox://styles/mapbox/dark-v10`
--   `mapbox://styles/mapbox/light-v10`
--   `mapbox://styles/mapbox/satellite-streets-v9`
--   `mapbox://styles/mapbox/traffic-day-v2`
--   `mapbox://styles/mapbox/traffic-night-v2`
+By default, this plugin works best with [OpenMapTiles styles](https://openmaptiles.org/styles/) or derived.
