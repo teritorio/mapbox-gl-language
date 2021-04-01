@@ -17,7 +17,7 @@ _Switch language based on user agent_
 ```javascript
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v10',
+    style: 'https://raw.githubusercontent.com/openmaptiles/osm-bright-gl-style/gh-pages/style-local.json',
     center: [-77.0259, 38.9010],
     zoom: 9
 });

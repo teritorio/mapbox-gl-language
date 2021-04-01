@@ -1,13 +1,12 @@
 var test = require('tape');
 var OpenMapTilesLanguage = require('../index');
 
-function makeStyle(layers, version) {
-  if (!version) version = 'v11';
+function makeStyle(layers) {
   return {
     sources: {
       composite: {
         type: 'vector',
-        url: `mapbox://mapbox-streets-${version}`
+        url: `https://raw.githubusercontent.com/openmaptiles/osm-bright-gl-style/gh-pages/style-local.json`
       }
     },
     layers
@@ -30,8 +29,8 @@ test('OpenMapTilesLanguage', (t) => {
         ]
       }
     }];
-    var style = makeStyle(layers, 'v10');
-    var err = new Error('If using OpenMapTilesLanguage with a Mapbox style, the style must be based on vector tile version 8, e.g. "streets-v11"');
+    var style = makeStyle(layers);
+    var err = new Error('If using OpenMapTilesLanguage with a Mapbox style, the style must be based on OpenMapTiles vector tile.');
     t.throws(() => {
       language.setLanguage(style, 'es');
     }, err.toString());

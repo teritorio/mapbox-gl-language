@@ -35,11 +35,8 @@
       zoom: 3
     });
     mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js');
-    map.addControl(new OpenMapTilesLanguage({
-      defaultLanguage: 'it'
-    }));
+    map.addControl(new OpenMapTilesLanguage());
   </script>
-
 </body>
 
 </html>
