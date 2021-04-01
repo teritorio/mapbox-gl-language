@@ -34,7 +34,7 @@ function OpenMapTilesLanguage(options) {
     }
   };
   this._excludedLayerIds = options.excludedLayerIds || [];
-  this.supportedLanguages = options.supportedLanguages || ['ar', 'de', 'en', 'es', 'fr', 'it', 'ja', 'ko', 'mul', 'pt', 'ru', 'zh-Hans', 'zh-Hant'];
+  this.supportedLanguages = options.supportedLanguages || ['am', 'ar', 'az', 'be', 'bg', 'br', 'bs', 'ca', 'co', 'cs', 'cy', 'da', 'de', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fi', 'fr', 'fy', 'ga', 'gd', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'ja_kana', 'ja_rm', 'ja-Latn', 'ja-Hira', 'ka', 'kk', 'kn', 'ko', 'ko-Latn', 'ku', 'la', 'lb', 'lt', 'lv', 'mk', 'mt', 'ml', 'mul', 'nl', 'no', 'oc', 'pl', 'pt', 'rm', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sr-Latn', 'sv', 'ta', 'te', 'th', 'tr', 'uk', 'zh'];
 }
 
 function standardSpacing(style) {
