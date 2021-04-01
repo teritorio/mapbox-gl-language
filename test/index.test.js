@@ -1,5 +1,5 @@
 var test = require('tape');
-var MapboxLanguage = require('../index');
+var OpenMapTilesLanguage = require('../index');
 
 function makeStyle(layers, version) {
   if (!version) version = 'v11';
@@ -14,10 +14,10 @@ function makeStyle(layers, version) {
   };
 }
 
-test('MapboxLanguage', (t) => {
+test('OpenMapTilesLanguage', (t) => {
 
   test('non-v8-based styles', (t) => {
-    var language = new MapboxLanguage();
+    var language = new OpenMapTilesLanguage();
     var layers = [{
       'id': 'state-label-sm',
       'source': 'composite',
@@ -25,14 +25,13 @@ test('MapboxLanguage', (t) => {
       'layout': {
         'text-letter-spacing': 0.15,
         'text-field': [
-          'coalesce',
-          ['get', 'name_en'],
+          'coalesce', ['get', 'name_en'],
           ['get', 'name']
         ]
       }
     }];
     var style = makeStyle(layers, 'v10');
-    var err = new Error('If using MapboxLanguage with a Mapbox style, the style must be based on vector tile version 8, e.g. "streets-v11"');
+    var err = new Error('If using OpenMapTilesLanguage with a Mapbox style, the style must be based on vector tile version 8, e.g. "streets-v11"');
     t.throws(() => {
       language.setLanguage(style, 'es');
     }, err.toString());
@@ -40,7 +39,7 @@ test('MapboxLanguage', (t) => {
   });
 
   test('unwrapped get expression styles', (t) => {
-    var language = new MapboxLanguage();
+    var language = new OpenMapTilesLanguage();
     var layers = [{
       'id': 'state-label-sm',
       'source': 'composite',
@@ -57,8 +56,7 @@ test('MapboxLanguage', (t) => {
     t.deepEqual(esStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce',
-        ['get', 'name_es'],
+        'coalesce', ['get', 'name_es'],
         ['get', 'name']
       ]
     }, 'wrap unwrapped get expression in coalesce');
@@ -66,7 +64,7 @@ test('MapboxLanguage', (t) => {
   });
 
   test('setLanguage for different text fields', (t) => {
-    var language = new MapboxLanguage();
+    var language = new OpenMapTilesLanguage();
     var layers = [{
       'id': 'state-label-sm',
       'source': 'composite',
@@ -74,8 +72,7 @@ test('MapboxLanguage', (t) => {
       'layout': {
         'text-letter-spacing': 0.15,
         'text-field': [
-          'coalesce',
-          ['get', 'name_en'],
+          'coalesce', ['get', 'name_en'],
           ['get', 'name']
         ]
       }
@@ -86,8 +83,7 @@ test('MapboxLanguage', (t) => {
     t.deepEqual(esStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce',
-        ['get', 'name_es'],
+        'coalesce', ['get', 'name_es'],
         ['get', 'name']
       ]
     }, 'switch style to spanish name field');
@@ -96,8 +92,7 @@ test('MapboxLanguage', (t) => {
     t.deepEqual(arStyle.layers[0].layout, {
       'text-letter-spacing': 0,
       'text-field': [
-        'coalesce',
-        ['get', 'name_ar'],
+        'coalesce', ['get', 'name_ar'],
         ['get', 'name']
       ]
     }, 'switch style to arabic name field');
@@ -106,8 +101,7 @@ test('MapboxLanguage', (t) => {
     t.deepEqual(mulStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce',
-        ['get', 'name'],
+        'coalesce', ['get', 'name'],
         ['get', 'name']
       ]
     }, 'switch style to multilingual name field');
@@ -116,7 +110,7 @@ test('MapboxLanguage', (t) => {
   });
 
   test('setLanguage with excluded layers', (t) => {
-    var language = new MapboxLanguage({excludedLayerIds: ['state-label-lg']});
+    var language = new OpenMapTilesLanguage({ excludedLayerIds: ['state-label-lg'] });
     var layers = [{
       'id': 'state-label-sm',
       'source': 'composite',
@@ -124,8 +118,7 @@ test('MapboxLanguage', (t) => {
       'layout': {
         'text-letter-spacing': 0.15,
         'text-field': [
-          'coalesce',
-          ['get', 'name_en'],
+          'coalesce', ['get', 'name_en'],
           ['get', 'name']
         ]
       }
@@ -136,8 +129,7 @@ test('MapboxLanguage', (t) => {
       'layout': {
         'text-letter-spacing': 0.15,
         'text-field': [
-          'coalesce',
-          ['get', 'name_en'],
+          'coalesce', ['get', 'name_en'],
           ['get', 'name']
         ]
       }
@@ -149,8 +141,7 @@ test('MapboxLanguage', (t) => {
     t.deepEqual(esStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce',
-        ['get', 'name_es'],
+        'coalesce', ['get', 'name_es'],
         ['get', 'name']
       ]
     }, 'switch style on regular field');
@@ -158,8 +149,7 @@ test('MapboxLanguage', (t) => {
     t.deepEqual(esStyle.layers[1].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce',
-        ['get', 'name_en'],
+        'coalesce', ['get', 'name_en'],
         ['get', 'name']
       ]
     }, 'do not switch style on excluded field');

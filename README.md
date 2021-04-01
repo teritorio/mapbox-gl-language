@@ -30,7 +30,7 @@ npm install --save mapbox-gl @mapbox/mapbox-gl-language
 
 ```javascript
 var mapboxgl = require('mapbox-gl')
-var MapboxLanguage = require('@mapbox/mapbox-gl-language');
+var OpenMapTilesLanguage = require('@mapbox/mapbox-gl-language');
 ```
 
 **Example**
@@ -47,7 +47,7 @@ var map = new mapboxgl.Map({
 // Add RTL support if you want to support Arabic
 // mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.10.1/mapbox-gl-rtl-text.js');
 
-var language = new MapboxLanguage();
+var language = new OpenMapTilesLanguage();
 map.addControl(language);
 ```
 
@@ -59,12 +59,12 @@ Check `examples/` for more usage examples.
 
 #### Table of Contents
 
--   [MapboxLanguage](#mapboxlanguage)
+-   [OpenMapTilesLanguage](#OpenMapTilesLanguage)
     -   [Parameters](#parameters)
     -   [setLanguage](#setlanguage)
         -   [Parameters](#parameters-1)
 
-### MapboxLanguage
+### OpenMapTilesLanguage
 
 Create a new [Mapbox GL JS plugin](https://www.mapbox.com/blog/build-mapbox-gl-js-plugins/) that
 modifies the layers of the map style to use the `text-field` that matches the browser language.

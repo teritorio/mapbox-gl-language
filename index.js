@@ -11,10 +11,10 @@
  * @param {string} [options.defaultLanguage] - Name of the default language to initialize style after loading.
  * @param {string[]} [options.excludedLayerIds] - Name of the layers that should be excluded from translation.
  */
-function MapboxLanguage(options) {
+function OpenMapTilesLanguage(options) {
   options = Object.assign({}, options);
-  if (!(this instanceof MapboxLanguage)) {
-    throw new Error('MapboxLanguage needs to be called with the new keyword');
+  if (!(this instanceof OpenMapTilesLanguage)) {
+    throw new Error('OpenMapTilesLanguage needs to be called with the new keyword');
   }
 
   this.setLanguage = this.setLanguage.bind(this);
@@ -26,7 +26,7 @@ function MapboxLanguage(options) {
     return language === 'mul' ? 'name' : `name_${language}`;
   };
   this._languageSource = options.languageSource || null;
-  this._languageTransform = options.languageTransform || function (style, language) {
+  this._languageTransform = options.languageTransform || function(style, language) {
     if (language === 'ar') {
       return noSpacing(style);
     } else {
@@ -38,7 +38,7 @@ function MapboxLanguage(options) {
 }
 
 function standardSpacing(style) {
-  var changedLayers = style.layers.map(function (layer) {
+  var changedLayers = style.layers.map(function(layer) {
     if (!(layer.layout || {})['text-field']) return layer;
     var spacing = 0;
     if (layer['source-layer'] === 'state_label') {
@@ -98,7 +98,7 @@ function standardSpacing(style) {
 }
 
 function noSpacing(style) {
-  var changedLayers = style.layers.map(function (layer) {
+  var changedLayers = style.layers.map(function(layer) {
     if (!(layer.layout || {})['text-field']) return layer;
     var spacing = 0;
     return Object.assign({}, layer, {
@@ -114,6 +114,7 @@ function noSpacing(style) {
 }
 
 var isTokenField = /^\{name/;
+
 function isFlatExpressionField(isLangField, property) {
   var isGetExpression = Array.isArray(property) && property[0] === 'get';
   if (isGetExpression && isTokenField.test(property[1])) {
@@ -165,13 +166,13 @@ function changeLayerTextProperty(isLangField, layer, languageFieldName, excluded
 }
 
 function findStreetsSource(style) {
-  var sources = Object.keys(style.sources).filter(function (sourceName) {
+  var sources = Object.keys(style.sources).filter(function(sourceName) {
     var url = style.sources[sourceName].url;
     // the source URL can reference the source version or the style version
     // this check and the error forces users to migrate to styles using source version 8
     return url && url.indexOf('mapbox.mapbox-streets-v8') > -1 || /mapbox-streets-v[1-9][1-9]/.test(url);
   });
-  if (!sources.length) throw new Error('If using MapboxLanguage with a Mapbox style, the style must be based on vector tile version 8, e.g. "streets-v11"');
+  if (!sources.length) throw new Error('If using OpenMapTilesLanguage with a Mapbox style, the style must be based on vector tile version 8, e.g. "streets-v11"');
   return sources[0];
 }
 
@@ -181,7 +182,7 @@ function findStreetsSource(style) {
  * @param {string} language - The language iso code
  * @returns {object} the modified style
  */
-MapboxLanguage.prototype.setLanguage = function (style, language) {
+OpenMapTilesLanguage.prototype.setLanguage = function(style, language) {
   if (this.supportedLanguages.indexOf(language) < 0) throw new Error('Language ' + language + ' is not supported');
   var streetsSource = this._languageSource || findStreetsSource(style);
   if (!streetsSource) return style;
@@ -189,7 +190,7 @@ MapboxLanguage.prototype.setLanguage = function (style, language) {
   var field = this._getLanguageField(language);
   var isLangField = this._isLanguageField;
   var excludedLayerIds = this._excludedLayerIds;
-  var changedLayers = style.layers.map(function (layer) {
+  var changedLayers = style.layers.map(function(layer) {
     if (layer.source === streetsSource) return changeLayerTextProperty(isLangField, layer, field, excludedLayerIds);
     return layer;
   });
@@ -201,7 +202,7 @@ MapboxLanguage.prototype.setLanguage = function (style, language) {
   return this._languageTransform(languageStyle, language);
 };
 
-MapboxLanguage.prototype._initialStyleUpdate = function () {
+OpenMapTilesLanguage.prototype._initialStyleUpdate = function() {
   var style = this._map.getStyle();
   var language = this._defaultLanguage || browserLanguage(this.supportedLanguages);
 
@@ -223,20 +224,20 @@ function browserLanguage(supportedLanguages) {
   return null;
 }
 
-MapboxLanguage.prototype.onAdd = function (map) {
+OpenMapTilesLanguage.prototype.onAdd = function(map) {
   this._map = map;
   this._map.on('styledata', this._initialStyleUpdate);
   this._container = document.createElement('div');
   return this._container;
 };
 
-MapboxLanguage.prototype.onRemove = function () {
+OpenMapTilesLanguage.prototype.onRemove = function() {
   this._map.off('styledata', this._initialStyleUpdate);
   this._map = undefined;
 };
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-  module.exports = MapboxLanguage;
+  module.exports = OpenMapTilesLanguage;
 } else {
-  window.MapboxLanguage = MapboxLanguage;
+  window.OpenMapTilesLanguage = OpenMapTilesLanguage;
 }
