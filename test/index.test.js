@@ -1,21 +1,23 @@
 var test = require('tape');
 var OpenMapTilesLanguage = require('../index');
 
-function makeStyle(layers) {
-  return {
-    sources: {
-      composite: {
-        type: 'vector',
-        url: `https://raw.githubusercontent.com/openmaptiles/osm-bright-gl-style/gh-pages/style-local.json`
-      }
-    },
+function makeStyle(layers, source = 'openmaptiles') {
+  const style = {
+    sources: {},
     layers
   };
+  style.sources[source] = {
+    openmaptiles: {
+      type: 'vector',
+      url: 'https://raw.githubusercontent.com/openmaptiles/osm-bright-gl-style/gh-pages/style-local.json'
+    }
+  };
+  return style;
 }
 
 test('OpenMapTilesLanguage', (t) => {
 
-  test('non-v8-based styles', (t) => {
+  test('non-openmaptiles-based styles', (t) => {
     var language = new OpenMapTilesLanguage();
     var layers = [{
       'id': 'state-label-sm',
@@ -24,12 +26,12 @@ test('OpenMapTilesLanguage', (t) => {
       'layout': {
         'text-letter-spacing': 0.15,
         'text-field': [
-          'coalesce', ['get', 'name_en'],
+          'coalesce', ['get', 'name:en'],
           ['get', 'name']
         ]
       }
     }];
-    var style = makeStyle(layers);
+    var style = makeStyle(layers, 'composite');
     var err = new Error('If using OpenMapTilesLanguage with a Mapbox style, the style must be based on OpenMapTiles vector tile.');
     t.throws(() => {
       language.setLanguage(style, 'es');
@@ -41,7 +43,7 @@ test('OpenMapTilesLanguage', (t) => {
     var language = new OpenMapTilesLanguage();
     var layers = [{
       'id': 'state-label-sm',
-      'source': 'composite',
+      'source': 'openmaptiles',
       'source-layer': 'state_label',
       'layout': {
         'text-letter-spacing': 0.15,
@@ -55,7 +57,7 @@ test('OpenMapTilesLanguage', (t) => {
     t.deepEqual(esStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce', ['get', 'name_es'],
+        'coalesce', ['get', 'name:es'],
         ['get', 'name']
       ]
     }, 'wrap unwrapped get expression in coalesce');
@@ -66,12 +68,12 @@ test('OpenMapTilesLanguage', (t) => {
     var language = new OpenMapTilesLanguage();
     var layers = [{
       'id': 'state-label-sm',
-      'source': 'composite',
+      'source': 'openmaptiles',
       'source-layer': 'state_label',
       'layout': {
         'text-letter-spacing': 0.15,
         'text-field': [
-          'coalesce', ['get', 'name_en'],
+          'coalesce', ['get', 'name:en'],
           ['get', 'name']
         ]
       }
@@ -82,7 +84,7 @@ test('OpenMapTilesLanguage', (t) => {
     t.deepEqual(esStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce', ['get', 'name_es'],
+        'coalesce', ['get', 'name:es'],
         ['get', 'name']
       ]
     }, 'switch style to spanish name field');
@@ -91,7 +93,7 @@ test('OpenMapTilesLanguage', (t) => {
     t.deepEqual(arStyle.layers[0].layout, {
       'text-letter-spacing': 0,
       'text-field': [
-        'coalesce', ['get', 'name_ar'],
+        'coalesce', ['get', 'name:ar'],
         ['get', 'name']
       ]
     }, 'switch style to arabic name field');
@@ -100,7 +102,7 @@ test('OpenMapTilesLanguage', (t) => {
     t.deepEqual(mulStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce', ['get', 'name'],
+        'coalesce', ['get', '{name:latin} {name:nonlatin}'],
         ['get', 'name']
       ]
     }, 'switch style to multilingual name field');
@@ -112,23 +114,23 @@ test('OpenMapTilesLanguage', (t) => {
     var language = new OpenMapTilesLanguage({ excludedLayerIds: ['state-label-lg'] });
     var layers = [{
       'id': 'state-label-sm',
-      'source': 'composite',
+      'source': 'openmaptiles',
       'source-layer': 'state_label',
       'layout': {
         'text-letter-spacing': 0.15,
         'text-field': [
-          'coalesce', ['get', 'name_en'],
+          'coalesce', ['get', 'name:en'],
           ['get', 'name']
         ]
       }
     }, {
       'id': 'state-label-lg',
-      'source': 'composite',
+      'source': 'openmaptiles',
       'source-layer': 'state_label',
       'layout': {
         'text-letter-spacing': 0.15,
         'text-field': [
-          'coalesce', ['get', 'name_en'],
+          'coalesce', ['get', 'name:en'],
           ['get', 'name']
         ]
       }
@@ -140,7 +142,7 @@ test('OpenMapTilesLanguage', (t) => {
     t.deepEqual(esStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce', ['get', 'name_es'],
+        'coalesce', ['get', 'name:es'],
         ['get', 'name']
       ]
     }, 'switch style on regular field');
@@ -148,7 +150,7 @@ test('OpenMapTilesLanguage', (t) => {
     t.deepEqual(esStyle.layers[1].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce', ['get', 'name_en'],
+        'coalesce', ['get', 'name:en'],
         ['get', 'name']
       ]
     }, 'do not switch style on excluded field');

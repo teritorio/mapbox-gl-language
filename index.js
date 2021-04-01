@@ -5,7 +5,7 @@
  * @param {object} options - Options to configure the plugin.
  * @param {string[]} [options.supportedLanguages] - List of supported languages
  * @param {Function} [options.languageTransform] - Custom style transformation to apply
- * @param {RegExp} [options.languageField=/^name_/] - RegExp to match if a text-field is a language field
+ * @param {RegExp} [options.languageField=/^name:/] - RegExp to match if a text-field is a language field
  * @param {Function} [options.getLanguageField] - Given a language choose the field in the vector tiles
  * @param {string} [options.languageSource] - Name of the source that contains the different languages.
  * @param {string} [options.defaultLanguage] - Name of the default language to initialize style after loading.
@@ -21,9 +21,9 @@ function OpenMapTilesLanguage(options) {
   this._initialStyleUpdate = this._initialStyleUpdate.bind(this);
 
   this._defaultLanguage = options.defaultLanguage;
-  this._isLanguageField = options.languageField || /^name_/;
+  this._isLanguageField = options.languageField || /^name:/;
   this._getLanguageField = options.getLanguageField || function nameField(language) {
-    return language === 'mul' ? 'name' : `name_${language}`;
+    return language === 'mul' ? '{name:latin} {name:nonlatin}' : `name:${language}`;
   };
   this._languageSource = options.languageSource || null;
   this._languageTransform = options.languageTransform || function(style, language) {
@@ -167,12 +167,9 @@ function changeLayerTextProperty(isLangField, layer, languageFieldName, excluded
 
 function findStreetsSource(style) {
   var sources = Object.keys(style.sources).filter(function(sourceName) {
-    var url = style.sources[sourceName].url;
-    // the source URL can reference the source version or the style version
-    // this check and the error forces users to migrate to styles using source version 8
-    return url && url.indexOf('mapbox.mapbox-streets-v8') > -1 || /mapbox-streets-v[1-9][1-9]/.test(url);
+    return sourceName == 'openmaptiles';
   });
-  if (!sources.length) throw new Error('If using OpenMapTilesLanguage with a Mapbox style, the style must be based on vector tile version 8, e.g. "streets-v11"');
+  if (!sources.length) throw new Error('If using OpenMapTilesLanguage with a Mapbox style, the style must be based on OpenMapTiles vector tile.');
   return sources[0];
 }
 
