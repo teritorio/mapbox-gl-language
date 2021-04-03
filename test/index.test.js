@@ -17,6 +17,41 @@ function makeStyle(layers, source = 'openmaptiles') {
 
 test('OpenMapTilesLanguage', (t) => {
 
+  test('legacy format string', (t) => {
+    var language = new OpenMapTilesLanguage();
+    var layers = [{
+      'id': 'state-label-sm',
+      'source': 'openmaptiles',
+      'source-layer': 'state_label',
+      'layout': {
+        'text-letter-spacing': 0.15,
+        'text-field': '{name:latin}{name:nonlatin}\n{ele} m'
+      }
+    }];
+    var style = makeStyle(layers);
+
+    var esStyle = language.setLanguage(style, 'es');
+    console.log('esStyle: ', esStyle);
+    t.deepEqual(esStyle.layers[0].layout, {
+      'text-letter-spacing': 0.15,
+      'text-field': [
+        'coalesce', ['concat', ['get', 'name:es'], '\n', ['get', 'ele'], ' m'],
+        ['concat', ['get', 'name:latin'],
+          ['get', 'name:nonlatin'], '\n', ['get', 'ele'], ' m'
+        ],
+        '{name:latin}{name:nonlatin}\n{ele} m'
+      ]
+    }, 'wrap legacy format string in coalesce');
+
+    var mulStyle = language.setLanguage(esStyle, 'mul');
+    console.log('mulStyle: ', mulStyle);
+    t.deepEqual(mulStyle.layers[0].layout, {
+      'text-letter-spacing': 0.15,
+      'text-field': '{name:latin}{name:nonlatin}\n{ele} m'
+    }, 'unwrap egacy format string');
+    t.end();
+  });
+
   test('unwrapped get expression styles', (t) => {
     var language = new OpenMapTilesLanguage();
     var layers = [{
@@ -80,7 +115,7 @@ test('OpenMapTilesLanguage', (t) => {
     t.deepEqual(mulStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce', ['get', '{name:latin} {name:nonlatin}'],
+        'coalesce', ['get', 'name'],
         ['get', 'name']
       ]
     }, 'switch style to multilingual name field');

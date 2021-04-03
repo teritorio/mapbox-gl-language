@@ -22,7 +22,7 @@ function OpenMapTilesLanguage(options) {
   this._defaultLanguage = options.defaultLanguage;
   this._isLanguageField = options.languageField || /^name:/;
   this._getLanguageField = options.getLanguageField || function nameField(language) {
-    return language === 'mul' ? '{name:latin} {name:nonlatin}' : `name:${language}`;
+    return language === 'mul' ? 'name' : `name:${language}`;
   };
   this._languageSource = options.languageSource || null;
   this._excludedLayerIds = options.excludedLayerIds || [];
@@ -70,11 +70,56 @@ function adaptPropertyLanguage(isLangField, property, languageFieldName) {
   return property;
 }
 
+function splitLegacityFormat(s) {
+  const ret = ['concat'];
+  var sub = '';
+  for (var i = 0; i < s.length; i++) {
+    if (s[i] === '{') {
+      if (sub) {
+        ret.push(sub);
+      }
+      sub = '';
+    } else if (s[i] === '}') {
+      if (sub) {
+        ret.push(['get', sub]);
+      }
+      sub = '';
+    } else {
+      sub += s[i];
+    }
+  }
+
+  if (sub) {
+    ret.push(sub);
+  }
+
+  return ret;
+}
+
+function adaptPropertyLanguageWithLegacySupport(isLangField, property, languageFieldName) {
+  if (property.length === 4 && property[0] === 'coalesce' && isTokenField.test(property[3])) {
+    // Back to original format string for legacy
+    property = property[3];
+  }
+
+  if (typeof property === 'string') {
+    // Only support legacy format string at top level
+    if (languageFieldName !== 'name' && isTokenField.test(property)) {
+      // The last is not used, it is the original value to be restaured
+      return ['coalesce', ['get', languageFieldName], splitLegacityFormat(property), property];
+    } else {
+      return property;
+    }
+  } else {
+    return adaptPropertyLanguage(isLangField, property, languageFieldName);
+  }
+}
+
 function changeLayerTextProperty(isLangField, layer, languageFieldName, excludedLayerIds) {
   if (layer.layout && layer.layout['text-field'] && excludedLayerIds.indexOf(layer.id) === -1) {
     return Object.assign({}, layer, {
       layout: Object.assign({}, layer.layout, {
-        'text-field': adaptPropertyLanguage(isLangField, layer.layout['text-field'], languageFieldName)
+        'text-field': adaptPropertyLanguageWithLegacySupport(isLangField, layer.layout['text-field'], languageFieldName)
       })
     });
   }
