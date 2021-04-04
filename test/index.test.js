@@ -35,7 +35,9 @@ test('OpenMapTilesLanguage', (t) => {
     t.deepEqual(esStyle.layers[0].layout, {
       'text-letter-spacing': 0.15,
       'text-field': [
-        'coalesce', ['concat', ['get', 'name:es'], '\n', ['get', 'ele'], ' m'],
+        'coalesce', ['concat', ['coalesce', ['get', 'name:es'],
+          ['get', 'name:latin']
+        ], '\n', ['get', 'ele'], ' m'],
         ['concat', ['get', 'name:latin'],
           ['get', 'name:nonlatin'], '\n', ['get', 'ele'], ' m'
         ],

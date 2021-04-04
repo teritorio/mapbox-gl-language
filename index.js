@@ -96,6 +96,25 @@ function splitLegacityFormat(s) {
   return ret;
 }
 
+OpenMapTilesLanguage.prototype.adaptLegacyExpression = function(expression, languageFieldName) {
+  // Kepp only first get name express
+  var isName = false;
+  var ret = [];
+  for (var i = 0; i < expression.length; i++) {
+    // ['get', 'name:.*']
+    if (Array.isArray(expression[i]) && this._isLanguageField.test(expression[i][1])) {
+      if (!isName) {
+        isName = true;
+        ret.push(['coalesce', ['get', languageFieldName], expression[i]]);
+      }
+    } else {
+      ret.push(expression[i]);
+    }
+  }
+
+  return ret;
+};
+
 function adaptPropertyLanguageWithLegacySupport(isLangField, property, languageFieldName) {
   if (property.length === 4 && property[0] === 'coalesce' && isTokenField.test(property[3])) {
     // Back to original format string for legacy
