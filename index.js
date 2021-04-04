@@ -81,14 +81,6 @@ function changeLayerTextProperty(isLangField, layer, languageFieldName, excluded
   return layer;
 }
 
-function findStreetsSource(style) {
-  var sources = Object.keys(style.sources).filter(function(sourceName) {
-    return sourceName == 'openmaptiles';
-  });
-  if (!sources.length) throw new Error('If using OpenMapTilesLanguage with a Mapbox style, the style must be based on OpenMapTiles vector tile.');
-  return sources[0];
-}
-
 /**
  * Explicitly change the language for a style.
  * @param {object} style - Mapbox GL style to modify
@@ -97,15 +89,12 @@ function findStreetsSource(style) {
  */
 OpenMapTilesLanguage.prototype.setLanguage = function(style, language) {
   if (this.supportedLanguages.indexOf(language) < 0) throw new Error('Language ' + language + ' is not supported');
-  var streetsSource = this._languageSource || findStreetsSource(style);
-  if (!streetsSource) return style;
 
   var field = this._getLanguageField(language);
   var isLangField = this._isLanguageField;
   var excludedLayerIds = this._excludedLayerIds;
   var changedLayers = style.layers.map(function(layer) {
-    if (layer.source === streetsSource) return changeLayerTextProperty(isLangField, layer, field, excludedLayerIds);
-    return layer;
+    return changeLayerTextProperty(isLangField, layer, field, excludedLayerIds);
   });
 
   var languageStyle = Object.assign({}, style, {

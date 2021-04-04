@@ -17,28 +17,6 @@ function makeStyle(layers, source = 'openmaptiles') {
 
 test('OpenMapTilesLanguage', (t) => {
 
-  test('non-openmaptiles-based styles', (t) => {
-    var language = new OpenMapTilesLanguage();
-    var layers = [{
-      'id': 'state-label-sm',
-      'source': 'composite',
-      'source-layer': 'state_label',
-      'layout': {
-        'text-letter-spacing': 0.15,
-        'text-field': [
-          'coalesce', ['get', 'name:en'],
-          ['get', 'name']
-        ]
-      }
-    }];
-    var style = makeStyle(layers, 'composite');
-    var err = new Error('If using OpenMapTilesLanguage with a Mapbox style, the style must be based on OpenMapTiles vector tile.');
-    t.throws(() => {
-      language.setLanguage(style, 'es');
-    }, err.toString());
-    t.end();
-  });
-
   test('unwrapped get expression styles', (t) => {
     var language = new OpenMapTilesLanguage();
     var layers = [{
