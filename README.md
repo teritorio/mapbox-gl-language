@@ -81,19 +81,19 @@ Run the linter and watch for changes to rebuild with browserify.
 
 Showcasing the languages supported by OpenMapTiles.
 
--   [Your Browser language](https://mapbox.github.io/mapbox-gl-language/examples/browser.html)
--   [Arabic](https://mapbox.github.io/mapbox-gl-language/examples/ar.html)
--   [Chinese Simplified](https://mapbox.github.io/mapbox-gl-language/examples/zh.html)
--   [English](https://mapbox.github.io/mapbox-gl-language/examples/en.html)
--   [French](https://mapbox.github.io/mapbox-gl-language/examples/fr.html)
--   [German](https://mapbox.github.io/mapbox-gl-language/examples/de.html)
--   [Italian](https://mapbox.github.io/mapbox-gl-language/examples/it.html)
--   [Japanese](https://mapbox.github.io/mapbox-gl-language/examples/ja.html)
--   [Korean](https://mapbox.github.io/mapbox-gl-language/examples/ko.html)
--   [Multilingual](https://mapbox.github.io/mapbox-gl-language/examples/multilingual.html)
--   [Portuguese](https://mapbox.github.io/mapbox-gl-language/examples/pt.html)
--   [Russian](https://mapbox.github.io/mapbox-gl-language/examples/ru.html)
--   [Spanish](https://mapbox.github.io/mapbox-gl-language/examples/es.html)
+-   [Your Browser language](https://teritorio.github.io/openmaptiles-gl-language/examples/browser.html)
+-   [Arabic](https://teritorio.github.io/openmaptiles-gl-language/examples/ar.html)
+-   [Chinese Simplified](https://teritorio.github.io/openmaptiles-gl-language/examples/zh.html)
+-   [English](https://teritorio.github.io/openmaptiles-gl-language/examples/en.html)
+-   [French](https://teritorio.github.io/openmaptiles-gl-language/examples/fr.html)
+-   [German](https://teritorio.github.io/openmaptiles-gl-language/examples/de.html)
+-   [Italian](https://teritorio.github.io/openmaptiles-gl-language/examples/it.html)
+-   [Japanese](https://teritorio.github.io/openmaptiles-gl-language/examples/ja.html)
+-   [Korean](https://teritorio.github.io/openmaptiles-gl-language/examples/ko.html)
+-   [Multilingual](https://teritorio.github.io/openmaptiles-gl-language/examples/multilingual.html)
+-   [Portuguese](https://teritorio.github.io/openmaptiles-gl-language/examples/pt.html)
+-   [Russian](https://teritorio.github.io/openmaptiles-gl-language/examples/ru.html)
+-   [Spanish](https://teritorio.github.io/openmaptiles-gl-language/examples/es.html)
 
 ## Supported Styles
 
