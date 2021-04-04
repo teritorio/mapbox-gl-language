@@ -40,7 +40,7 @@ Check `examples/` for more usage examples.
 
 #### Table of Contents
 
--   [OpenMapTilesLanguage](#OpenMapTilesLanguage)
+-   [OpenMapTilesLanguage](#openmaptileslanguage)
     -   [Parameters](#parameters)
     -   [setLanguage](#setlanguage)
         -   [Parameters](#parameters-1)
@@ -48,28 +48,13 @@ Check `examples/` for more usage examples.
 ### OpenMapTilesLanguage
 
 Create a new [Mapbox GL JS plugin](https://www.mapbox.com/blog/build-mapbox-gl-js-plugins/) that
-modifies the layers of the map style to use the `text-field` that matches the browser language.
-
-As of Mapbox GL Language v1.0.0, this plugin no longer supports token values (e.g. `{name}`). v1.0+ expects the `text-field`
-property of a style to use an [expression](https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/) of the form `['get', 'name_en']` or `['get', 'name']`; these expressions can be nested. Note that `get` expressions used as inputs to other expressions may not be handled by this plugin. For example:
-```
-["match", 
-  ["get", "name"], 
-  "California", 
-  "Golden State", 
-  ["coalesce", 
-    ["get", "name_en"], 
-    ["get", "name"]
-  ]
-]
-```
-Only styles based on [OpenMapTiles styles](https://openmaptiles.org/) are supported.
+modifies the layers of the map style to use the 'text-field' that matches the browser language.
 
 #### Parameters
 
 -   `options` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Options to configure the plugin.
     -   `options.supportedLanguages` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>?** List of supported languages
-    -   `options.languageField` **[RegExp](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp)** RegExp to match if a text-field is a language field (optional, default `/^name:/`). Note that as of Mapbox GL Language v1.0.0, token values (e.g. `{name}`) are no longer supported.
+    -   `options.languageField` **[RegExp](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp)** RegExp to match if a text-field is a language field (optional, default `/^name:/`)
     -   `options.getLanguageField` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)?** Given a language choose the field in the vector tiles
     -   `options.languageSource` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Name of the source that contains the different languages.
     -   `options.defaultLanguage` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Name of the default language to initialize style after loading.
@@ -81,7 +66,6 @@ Explicitly change the language for a style.
 
 ##### Parameters
 
--   `style` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Mapbox GL style to modify
 -   `language` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The language iso code
 
 Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the modified style
