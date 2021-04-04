@@ -1,0 +1,12 @@
+{
+  "env": {
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "rules": {
+    "space-before-function-paren": 0,
+    "eol-last": 0
+  }
+}

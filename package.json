@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint lib && eslint index.js test/*.js",
-    "pretest": "npm run lint",
     "test": "nyc tape test/*.test.js | tap-spec",
     "docs": "documentation readme index.js --section API"
   },
