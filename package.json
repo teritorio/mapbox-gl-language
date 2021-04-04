@@ -1,7 +1,7 @@
 {
   "name": "@mapbox/mapbox-gl-language",
   "version": "0.10.1",
-  "description": "Mapbox GL JS plugin for switching language to the browser language.",
+  "description": "Mapbox GL JS plugin for OpenMapTiles style for switching language to the browser language.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint lib && eslint index.js test/*.js",
@@ -14,6 +14,7 @@
   },
   "keywords": [
     "mapbox",
+    "openmaptiles",
     "gis",
     "vector",
     "leaflet",
