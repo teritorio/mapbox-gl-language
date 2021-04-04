@@ -4,7 +4,6 @@
  * @constructor
  * @param {object} options - Options to configure the plugin.
  * @param {string[]} [options.supportedLanguages] - List of supported languages
- * @param {Function} [options.languageTransform] - Custom style transformation to apply
  * @param {RegExp} [options.languageField=/^name:/] - RegExp to match if a text-field is a language field
  * @param {Function} [options.getLanguageField] - Given a language choose the field in the vector tiles
  * @param {string} [options.languageSource] - Name of the source that contains the different languages.
@@ -26,91 +25,8 @@ function OpenMapTilesLanguage(options) {
     return language === 'mul' ? '{name:latin} {name:nonlatin}' : `name:${language}`;
   };
   this._languageSource = options.languageSource || null;
-  this._languageTransform = options.languageTransform || function(style, language) {
-    if (language === 'ar') {
-      return noSpacing(style);
-    } else {
-      return standardSpacing(style);
-    }
-  };
   this._excludedLayerIds = options.excludedLayerIds || [];
   this.supportedLanguages = options.supportedLanguages || ['am', 'ar', 'az', 'be', 'bg', 'br', 'bs', 'ca', 'co', 'cs', 'cy', 'da', 'de', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fi', 'fr', 'fy', 'ga', 'gd', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'ja_kana', 'ja_rm', 'ja-Latn', 'ja-Hira', 'ka', 'kk', 'kn', 'ko', 'ko-Latn', 'ku', 'la', 'lb', 'lt', 'lv', 'mk', 'mt', 'ml', 'mul', 'nl', 'no', 'oc', 'pl', 'pt', 'rm', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sr-Latn', 'sv', 'ta', 'te', 'th', 'tr', 'uk', 'zh'];
-}
-
-function standardSpacing(style) {
-  var changedLayers = style.layers.map(function(layer) {
-    if (!(layer.layout || {})['text-field']) return layer;
-    var spacing = 0;
-    if (layer['source-layer'] === 'state_label') {
-      spacing = 0.15;
-    }
-    if (layer['source-layer'] === 'marine_label') {
-      if (/-lg/.test(layer.id)) {
-        spacing = 0.25;
-      }
-      if (/-md/.test(layer.id)) {
-        spacing = 0.15;
-      }
-      if (/-sm/.test(layer.id)) {
-        spacing = 0.1;
-      }
-    }
-    if (layer['source-layer'] === 'place_label') {
-      if (/-suburb/.test(layer.id)) {
-        spacing = 0.15;
-      }
-      if (/-neighbour/.test(layer.id)) {
-        spacing = 0.1;
-      }
-      if (/-islet/.test(layer.id)) {
-        spacing = 0.01;
-      }
-    }
-    if (layer['source-layer'] === 'airport_label') {
-      spacing = 0.01;
-    }
-    if (layer['source-layer'] === 'rail_station_label') {
-      spacing = 0.01;
-    }
-    if (layer['source-layer'] === 'poi_label') {
-      if (/-scalerank/.test(layer.id)) {
-        spacing = 0.01;
-      }
-    }
-    if (layer['source-layer'] === 'road_label') {
-      if (/-label-/.test(layer.id)) {
-        spacing = 0.01;
-      }
-      if (/-shields/.test(layer.id)) {
-        spacing = 0.05;
-      }
-    }
-    return Object.assign({}, layer, {
-      layout: Object.assign({}, layer.layout, {
-        'text-letter-spacing': spacing
-      })
-    });
-  });
-
-  return Object.assign({}, style, {
-    layers: changedLayers
-  });
-}
-
-function noSpacing(style) {
-  var changedLayers = style.layers.map(function(layer) {
-    if (!(layer.layout || {})['text-field']) return layer;
-    var spacing = 0;
-    return Object.assign({}, layer, {
-      layout: Object.assign({}, layer.layout, {
-        'text-letter-spacing': spacing
-      })
-    });
-  });
-
-  return Object.assign({}, style, {
-    layers: changedLayers
-  });
 }
 
 var isTokenField = /^\{name/;
@@ -196,7 +112,7 @@ OpenMapTilesLanguage.prototype.setLanguage = function(style, language) {
     layers: changedLayers
   });
 
-  return this._languageTransform(languageStyle, language);
+  return languageStyle;
 };
 
 OpenMapTilesLanguage.prototype._initialStyleUpdate = function() {
