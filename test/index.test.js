@@ -1,174 +1,72 @@
 var test = require('tape');
 var OpenMapTilesLanguage = require('../index');
 
-function makeStyle(layers, source = 'openmaptiles') {
-  const style = {
-    sources: {},
-    layers
-  };
-  style.sources[source] = {
-    openmaptiles: {
-      type: 'vector',
-      url: 'https://raw.githubusercontent.com/openmaptiles/osm-bright-gl-style/gh-pages/style-local.json'
-    }
-  };
-  return style;
+function setLanguage(language, property, lang) {
+  return language.adaptPropertyLanguageWithLegacySupport(/^name:/, property, language._getLanguageField(lang), []);
 }
 
 test('OpenMapTilesLanguage', (t) => {
 
   test('legacy format string', (t) => {
     var language = new OpenMapTilesLanguage();
-    var layers = [{
-      'id': 'state-label-sm',
-      'source': 'openmaptiles',
-      'source-layer': 'state_label',
-      'layout': {
-        'text-letter-spacing': 0.15,
-        'text-field': '{name:latin}{name:nonlatin}\n{ele} m'
-      }
-    }];
-    var style = makeStyle(layers);
+    var layers = '{name:latin}{name:nonlatin}\n{ele} m';
 
-    var esStyle = language.setLanguage(style, 'es');
-    console.log('esStyle: ', esStyle);
-    t.deepEqual(esStyle.layers[0].layout, {
-      'text-letter-spacing': 0.15,
-      'text-field': [
-        'coalesce', ['concat', ['coalesce', ['get', 'name:es'],
-          ['get', 'name:latin']
-        ], '\n', ['get', 'ele'], ' m'],
-        ['concat', ['get', 'name:latin'],
-          ['get', 'name:nonlatin'], '\n', ['get', 'ele'], ' m'
-        ],
-        '{name:latin}{name:nonlatin}\n{ele} m'
-      ]
-    }, 'wrap legacy format string in coalesce');
+    var esLayer = setLanguage(language, layers, 'es');
+    console.log('esLayer: ', esLayer);
+    t.deepEqual(esLayer, [
+      'coalesce', ['concat', ['coalesce', ['get', 'name:es'],
+        ['get', 'name:latin']
+      ], '\n', ['get', 'ele'], ' m'],
+      ['concat', ['get', 'name:latin'],
+        ['get', 'name:nonlatin'], '\n', ['get', 'ele'], ' m'
+      ],
+      '{name:latin}{name:nonlatin}\n{ele} m'
+    ], 'wrap legacy format string in coalesce');
 
-    var mulStyle = language.setLanguage(esStyle, 'mul');
-    console.log('mulStyle: ', mulStyle);
-    t.deepEqual(mulStyle.layers[0].layout, {
-      'text-letter-spacing': 0.15,
-      'text-field': '{name:latin}{name:nonlatin}\n{ele} m'
-    }, 'unwrap egacy format string');
+    var mulLayer = setLanguage(language, esLayer, 'mul');
+    console.log('mulLayer: ', mulLayer);
+    t.deepEqual(mulLayer, '{name:latin}{name:nonlatin}\n{ele} m', 'unwrap egacy format string');
     t.end();
   });
 
   test('unwrapped get expression styles', (t) => {
     var language = new OpenMapTilesLanguage();
-    var layers = [{
-      'id': 'state-label-sm',
-      'source': 'openmaptiles',
-      'source-layer': 'state_label',
-      'layout': {
-        'text-letter-spacing': 0.15,
-        'text-field': ['get', 'name']
-      }
-    }];
-    var style = makeStyle(layers);
+    var layers = ['get', 'name'];
 
-    var esStyle = language.setLanguage(style, 'es');
-    console.log('esStyle: ', esStyle);
-    t.deepEqual(esStyle.layers[0].layout, {
-      'text-letter-spacing': 0.15,
-      'text-field': [
-        'coalesce', ['get', 'name:es'],
-        ['get', 'name']
-      ]
-    }, 'wrap unwrapped get expression in coalesce');
+    var esLayer = setLanguage(language, layers, 'es');
+    console.log('esLayer: ', esLayer);
+    t.deepEqual(esLayer, [
+      'coalesce', ['get', 'name:es'],
+      ['get', 'name']
+    ], 'wrap unwrapped get expression in coalesce');
     t.end();
   });
 
   test('setLanguage for different text fields', (t) => {
     var language = new OpenMapTilesLanguage();
-    var layers = [{
-      'id': 'state-label-sm',
-      'source': 'openmaptiles',
-      'source-layer': 'state_label',
-      'layout': {
-        'text-letter-spacing': 0.15,
-        'text-field': [
-          'coalesce', ['get', 'name:en'],
-          ['get', 'name']
-        ]
-      }
-    }];
-    var style = makeStyle(layers);
+    var layers = [
+      'coalesce', ['get', 'name:en'],
+      ['get', 'name']
+    ];
 
-    var esStyle = language.setLanguage(style, 'es');
-    t.deepEqual(esStyle.layers[0].layout, {
-      'text-letter-spacing': 0.15,
-      'text-field': [
-        'coalesce', ['get', 'name:es'],
-        ['get', 'name']
-      ]
-    }, 'switch style to spanish name field');
+    var esLayer = setLanguage(language, layers, 'es');
+    t.deepEqual(esLayer, [
+      'coalesce', ['get', 'name:es'],
+      ['get', 'name']
+    ], 'switch style to spanish name field');
 
-    var arStyle = language.setLanguage(style, 'ar');
-    t.deepEqual(arStyle.layers[0].layout, {
-      'text-letter-spacing': 0,
-      'text-field': [
-        'coalesce', ['get', 'name:ar'],
-        ['get', 'name']
-      ]
-    }, 'switch style to arabic name field');
+    var arLayer = setLanguage(language, layers, 'ar');
+    t.deepEqual(arLayer, [
+      'coalesce', ['get', 'name:ar'],
+      ['get', 'name']
+    ], 'switch style to arabic name field');
 
-    var mulStyle = language.setLanguage(style, 'mul');
-    t.deepEqual(mulStyle.layers[0].layout, {
-      'text-letter-spacing': 0.15,
-      'text-field': [
-        'coalesce', ['get', 'name'],
-        ['get', 'name']
-      ]
-    }, 'switch style to multilingual name field');
+    var mulLayer = setLanguage(language, layers, 'mul');
+    t.deepEqual(mulLayer, [
+      'coalesce', ['get', 'name'],
+      ['get', 'name']
+    ], 'switch style to multilingual name field');
 
-    t.end();
-  });
-
-  test('setLanguage with excluded layers', (t) => {
-    var language = new OpenMapTilesLanguage({ excludedLayerIds: ['state-label-lg'] });
-    var layers = [{
-      'id': 'state-label-sm',
-      'source': 'openmaptiles',
-      'source-layer': 'state_label',
-      'layout': {
-        'text-letter-spacing': 0.15,
-        'text-field': [
-          'coalesce', ['get', 'name:en'],
-          ['get', 'name']
-        ]
-      }
-    }, {
-      'id': 'state-label-lg',
-      'source': 'openmaptiles',
-      'source-layer': 'state_label',
-      'layout': {
-        'text-letter-spacing': 0.15,
-        'text-field': [
-          'coalesce', ['get', 'name:en'],
-          ['get', 'name']
-        ]
-      }
-    }];
-
-    var style = makeStyle(layers);
-
-    var esStyle = language.setLanguage(style, 'es');
-    t.deepEqual(esStyle.layers[0].layout, {
-      'text-letter-spacing': 0.15,
-      'text-field': [
-        'coalesce', ['get', 'name:es'],
-        ['get', 'name']
-      ]
-    }, 'switch style on regular field');
-
-    t.deepEqual(esStyle.layers[1].layout, {
-      'text-letter-spacing': 0.15,
-      'text-field': [
-        'coalesce', ['get', 'name:en'],
-        ['get', 'name']
-      ]
-    }, 'do not switch style on excluded field');
     t.end();
   });
 

@@ -27,6 +27,9 @@ var map = new mapboxgl.Map({
 
 var language = new OpenMapTilesLanguage();
 map.addControl(language);
+
+// Language can be set at initialization or later
+language.setLanguage('es');
 ```
 
 Check `examples/` for more usage examples.

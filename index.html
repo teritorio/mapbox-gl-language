@@ -36,15 +36,18 @@
     });
     mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js');
     var language = new OpenMapTilesLanguage();
-    var i = 0;
-    setInterval(function() {
-      map.setStyle(language.setLanguage(map.getStyle(), language.supportedLanguages[i]));
-      if (i >= language.supportedLanguages.length - 1) {
-        i = 0;
-      } else {
-        i += 1;
-      }
-    }, 2000);
+    map.addControl(language);
+    map.on('load', function() {
+      var i = 0;
+      setInterval(function() {
+        language.setLanguage(language.supportedLanguages[i]);
+        if (i >= language.supportedLanguages.length - 1) {
+          i = 0;
+        } else {
+          i += 1;
+        }
+      }, 2000);
+    });
   </script>
 
 </body>

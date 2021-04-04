@@ -115,7 +115,7 @@ OpenMapTilesLanguage.prototype.adaptLegacyExpression = function(expression, lang
   return ret;
 };
 
-function adaptPropertyLanguageWithLegacySupport(isLangField, property, languageFieldName) {
+OpenMapTilesLanguage.prototype.adaptPropertyLanguageWithLegacySupport = function(isLangField, property, languageFieldName) {
   if (property.length === 4 && property[0] === 'coalesce' && isTokenField.test(property[3])) {
     // Back to original format string for legacy
     property = property[3];
@@ -124,57 +124,46 @@ function adaptPropertyLanguageWithLegacySupport(isLangField, property, languageF
   if (typeof property === 'string') {
     // Only support legacy format string at top level
     if (languageFieldName !== 'name' && isTokenField.test(property)) {
-      // The last is not used, it is the original value to be restaured
-      return ['coalesce', ['get', languageFieldName], splitLegacityFormat(property), property];
+      const splitLegacity = splitLegacityFormat(property);
+      // The last is not used, it is the original value to be restore
+      return ['coalesce', this.adaptLegacyExpression(splitLegacity, languageFieldName), splitLegacity, property];
     } else {
       return property;
     }
   } else {
     return adaptPropertyLanguage(isLangField, property, languageFieldName);
   }
-}
+};
 
-function changeLayerTextProperty(isLangField, layer, languageFieldName, excludedLayerIds) {
+OpenMapTilesLanguage.prototype.changeLayerTextProperty = function(isLangField, layer, languageFieldName, excludedLayerIds) {
   if (layer.layout && layer.layout['text-field'] && excludedLayerIds.indexOf(layer.id) === -1) {
-    return Object.assign({}, layer, {
-      layout: Object.assign({}, layer.layout, {
-        'text-field': adaptPropertyLanguageWithLegacySupport(isLangField, layer.layout['text-field'], languageFieldName)
-      })
-    });
+    this._map.setLayoutProperty(layer.id, 'text-field', this.adaptPropertyLanguageWithLegacySupport(isLangField, layer.layout['text-field'], languageFieldName));
   }
-  return layer;
-}
+};
 
 /**
  * Explicitly change the language for a style.
- * @param {object} style - Mapbox GL style to modify
  * @param {string} language - The language iso code
  * @returns {object} the modified style
  */
-OpenMapTilesLanguage.prototype.setLanguage = function(style, language) {
+OpenMapTilesLanguage.prototype.setLanguage = function(language) {
   if (this.supportedLanguages.indexOf(language) < 0) throw new Error('Language ' + language + ' is not supported');
 
   var field = this._getLanguageField(language);
   var isLangField = this._isLanguageField;
   var excludedLayerIds = this._excludedLayerIds;
-  var changedLayers = style.layers.map(function(layer) {
-    return changeLayerTextProperty(isLangField, layer, field, excludedLayerIds);
+  var self = this;
+  this._map.getStyle().layers.forEach(function(layer) {
+    self.changeLayerTextProperty(isLangField, layer, field, excludedLayerIds);
   });
-
-  var languageStyle = Object.assign({}, style, {
-    layers: changedLayers
-  });
-
-  return languageStyle;
 };
 
 OpenMapTilesLanguage.prototype._initialStyleUpdate = function() {
-  var style = this._map.getStyle();
   var language = this._defaultLanguage || browserLanguage(this.supportedLanguages);
 
   // We only update the style once
   this._map.off('styledata', this._initialStyleUpdate);
-  this._map.setStyle(this.setLanguage(style, language));
+  this.setLanguage(language);
 };
 
 function browserLanguage(supportedLanguages) {
