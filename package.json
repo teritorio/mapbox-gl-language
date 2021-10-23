@@ -1,6 +1,6 @@
 {
   "name": "@teritorio/openmaptiles-gl-language",
-  "version": "0.10.1",
+  "version": "1.0.0",
   "description": "Mapbox GL JS plugin for OpenMapTiles style for switching language to the browser language.",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,9 @@
   ],
   "author": "Lukas Martinelli",
   "license": "BSD-3-Clause",
+  "publishConfig": {
+    "access": "public"
+  },
   "bugs": {
     "url": "https://github.com/teritorio/openmaptiles-gl-language/issues"
   },
