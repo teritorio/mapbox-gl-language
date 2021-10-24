@@ -25,7 +25,7 @@ var map = new mapboxgl.Map({
 // Add RTL support if you want to support Arabic
 // mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.10.1/mapbox-gl-rtl-text.js');
 
-var language = new OpenMapTilesLanguage();
+var language = new teritorio.OpenMapTilesLanguage();
 map.addControl(language);
 
 // Language can be set at initialization or later
