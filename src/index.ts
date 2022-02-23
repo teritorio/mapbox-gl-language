@@ -1,12 +1,12 @@
 import { Control } from './control';
 
 interface Options {
-  supportedLanguages: string[]; // List of supported languages
-  languageField: RegExp; // /^name:/ // RegExp to match if a text-field is a language field
-  getLanguageField: Function; // Given a language choose the field in the vector tiles
-  languageSource: string; // Name of the source that contains the different languages.
-  defaultLanguage: string; // Name of the default language to initialize style after loading.
-  excludedLayerIds: string[]; // Name of the layers that should be excluded from translation.
+  supportedLanguages?: string[]; // List of supported languages
+  languageField?: RegExp; // /^name:/ // RegExp to match if a text-field is a language field
+  getLanguageField?: Function; // Given a language choose the field in the vector tiles
+  languageSource?: string; // Name of the source that contains the different languages.
+  defaultLanguage?: string; // Name of the default language to initialize style after loading.
+  excludedLayerIds?: string[]; // Name of the layers that should be excluded from translation.
 }
 
 /**
