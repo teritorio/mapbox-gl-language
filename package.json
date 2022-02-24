@@ -1,6 +1,6 @@
 {
   "name": "@teritorio/openmaptiles-gl-language",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Mapbox GL JS plugin for OpenMapTiles style for switching language to the browser language.",
   "main": "dist/index.js",
   "module": "dist/teritorio-map.esm.js",
