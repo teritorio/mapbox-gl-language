@@ -287,11 +287,11 @@ export class OpenMapTilesLanguage extends Control {
       });
   }
 
-  _initialStyleUpdate() {
+  _initialUpdate() {
     var language = this._options?.defaultLanguage || this.browserLanguage(this.supportedLanguages);
 
     // We only update the style once
-    this._map?.off('styledata', this._initialStyleUpdate);
+    this._map?.off('styledata', this._initialUpdate);
     this.setLanguage(language);
   }
 
