@@ -13,10 +13,10 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "tsdx build --format cjs,esm,umd --name teritorio",
+    "build": "tsdx build --format cjs,esm,umd --name openmaptiles-gl-language",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build --format cjs,esm,umd --name teritorio"
+    "prepare": "tsdx build --format cjs,esm,umd --name openmaptiles-gl-language"
   },
   "repository": {
     "type": "git",
@@ -24,11 +24,11 @@
   },
   "keywords": [
     "mapbox",
+    "maplibre",
     "openmaptiles",
     "teritorio",
     "gis",
     "vector",
-    "leaflet",
     "gl"
   ],
   "author": "Frédéric Rodrigo",
