@@ -288,6 +288,8 @@ export class OpenMapTilesLanguage extends Control {
   }
 
   _initialUpdate() {
+    super._initialUpdate();
+
     var language = this._options?.defaultLanguage || this.browserLanguage(this.supportedLanguages);
 
     // We only update the style once
