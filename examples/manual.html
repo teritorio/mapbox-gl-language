@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Teritorio - Démonstration cartographie</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.umd.production.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-size: 16px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .top-buttons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      margin: 0;
+      padding: 1rem;
+      padding-right: 3em;
+    }
+
+    .top-buttons>li {
+      width: 20%;
+      min-width: max-content;
+      margin: 0;
+      padding: 0.5rem;
+      list-style-type: none;
+    }
+
+    .top-buttons>li>button {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.2rem;
+      box-shadow: none;
+      color: #000;
+      font-size: 0.8rem;
+      line-height: 1.2rem;
+      font-family: sans-serif;
+      font-weight: bold;
+    }
+
+    .top-buttons>li>button:hover,
+    .top-buttons>li>button:focus,
+    .top-buttons>li>button:active {
+      box-shadow: 0 0 0 2px #0f395e44;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="map"></div>
+
+  <ul class="top-buttons">
+    <li><button data-filter="lang-fr">En français</button></li>
+    <li><button data-filter="lang-en">In English</button></li>
+    <li><button data-filter="lang-es">En español</button></li>
+  </ul>
+
+  <script type="text/javascript">
+    const map = new mapboxgl.Map({
+      container: document.querySelector('.map'),
+      style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
+      center: [-98, 38.88],
+      minZoom: 2,
+      zoom: 3
+    });
+
+    var language = new openmaptiles_gl_language.OpenMapTilesLanguage({
+      defaultLanguage: 'fr'
+    });
+    map.addControl(language);
+
+    document.querySelector('.top-buttons').addEventListener('click', function (event) {
+      event.stopPropagation();
+
+      const lang = event.target.dataset.filter.substring(5, 7);
+      language.setLanguage(lang);
+    });
+  </script>
+</body>
+
+</html>

@@ -2,7 +2,7 @@
 
 Adds support for switching the language of your map style in [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/) maps.
 
-**Requires [mapbox-gl-js](https://github.com/mapbox/mapbox-gl-js).** For other platforms, such as Android and iOS, see [this help document](https://www.mapbox.com/help/change-language/).
+Requires [maplibre-gl-js](https://maplibre.org/projects/#js) or older [mapbox-gl-js](https://github.com/mapbox/mapbox-gl-js).
 
 ![Multiple language supported with style transforms](https://cloud.githubusercontent.com/assets/1288339/26266912/89b1b6ba-3cb5-11e7-9964-49f51290d627.gif)
 
@@ -25,7 +25,7 @@ var map = new mapboxgl.Map({
 // Add RTL support if you want to support Arabic
 // mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.10.1/mapbox-gl-rtl-text.js');
 
-var language = new teritorio.OpenMapTilesLanguage();
+var language = new openmaptiles_gl_language.OpenMapTilesLanguage();
 map.addControl(language);
 
 // Language can be set at initialization or later
@@ -33,6 +33,45 @@ language.setLanguage('es');
 ```
 
 Check `examples/` for more usage examples.
+
+## Usage
+
+The project is bundled in several formats so you can use it everywhere.
+
+If you don't know what format is better for you, choose UMD ;)
+
+### UMD (Universal Module Definition)
+
+To use in your HTML files:
+
+```html
+<script
+  type="text/javascript"
+  src="https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.umd.production.min.js"
+></script>
+```
+
+### CommonJS
+
+To import the library in your bundled project:
+
+```js
+import { OpenMapTilesLanguage } from '@teritorio/openmaptiles-gl-language'
+
+const languageControl = new OpenMapTilesLanguage({
+    defaultLanguage: 'it',
+})
+```
+
+### ES Module
+
+```html
+<script type="module">
+  import { icon } from 'https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.esm.js';
+
+  icon(/* ... */);
+</script>
+```
 
 ## API
 
@@ -94,6 +133,8 @@ Showcasing the languages supported by OpenMapTiles.
 -   [Portuguese](https://teritorio.github.io/openmaptiles-gl-language/examples/pt.html)
 -   [Russian](https://teritorio.github.io/openmaptiles-gl-language/examples/ru.html)
 -   [Spanish](https://teritorio.github.io/openmaptiles-gl-language/examples/es.html)
+
+Or [manual](https://teritorio.github.io/openmaptiles-gl-language/examples/manual.html) switch.
 
 ## Supported Styles
 
