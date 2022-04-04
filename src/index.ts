@@ -256,7 +256,7 @@ export class OpenMapTilesLanguage extends Control {
         'text-field',
         this.adaptPropertyLanguageWithLegacySupport(
           isLangField,
-          layer.layout['text-field'] as 'string | MapboxExpr',
+          layer.layout['text-field'] as string | MapboxExpr,
           languageFieldName,
         ),
       );
