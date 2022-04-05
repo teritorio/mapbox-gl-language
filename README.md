@@ -25,11 +25,13 @@ var map = new mapboxgl.Map({
 // Add RTL support if you want to support Arabic
 // mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.10.1/mapbox-gl-rtl-text.js');
 
-var language = new openmaptiles_gl_language.OpenMapTilesLanguage();
-map.addControl(language);
+// Language can be fixed at initialization or not
+const languageControl = new OpenMapTilesLanguage({
+    defaultLanguage: 'it',
+})
 
-// Language can be set at initialization or later
-language.setLanguage('es');
+// Language can be set later
+languageControl.setLanguage('es');
 ```
 
 Check `examples/` for more usage examples.
@@ -60,16 +62,16 @@ import { OpenMapTilesLanguage } from '@teritorio/openmaptiles-gl-language'
 
 const languageControl = new OpenMapTilesLanguage({
     defaultLanguage: 'it',
-})
+});
 ```
 
 ### ES Module
 
 ```html
 <script type="module">
-  import { icon } from 'https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.esm.js';
+  import { OpenMapTilesLanguage } from 'https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.esm.js';
 
-  icon(/* ... */);
+const languageControl = new OpenMapTilesLanguage();
 </script>
 ```
 
