@@ -29,6 +29,7 @@ var map = new mapboxgl.Map({
 const languageControl = new OpenMapTilesLanguage({
     defaultLanguage: 'it',
 })
+map.addControl(languageControl);
 
 // Language can be set later
 languageControl.setLanguage('es');
@@ -63,15 +64,17 @@ import { OpenMapTilesLanguage } from '@teritorio/openmaptiles-gl-language'
 const languageControl = new OpenMapTilesLanguage({
     defaultLanguage: 'it',
 });
+map.addControl(languageControl);
 ```
 
 ### ES Module
 
 ```html
 <script type="module">
-  import { OpenMapTilesLanguage } from 'https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.esm.js';
+import { OpenMapTilesLanguage } from 'https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.esm.js';
 
 const languageControl = new OpenMapTilesLanguage();
+map.addControl(languageControl);
 </script>
 ```
 
